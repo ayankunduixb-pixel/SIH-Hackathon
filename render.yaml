@@ -1,0 +1,60 @@
+# Render Blueprint for the Jal Jeevan Swasthya FastAPI backend.
+# Deploy via dashboard.render.com -> New + -> Blueprint, or
+# https://dashboard.render.com/select-repo?type=blueprint
+#
+# The frontend (frontend/) deploys separately on Vercel; set NEXT_PUBLIC_API_URL
+# there to this service's URL and put that Vercel URL into CORS_ORIGINS below.
+
+services:
+  - type: web
+    name: jal-jeevan-swasthya-api
+    runtime: python
+    rootDir: backend
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.6
+      - key: APP_NAME
+        value: Jal Jeevan Swasthya
+      - key: APP_VERSION
+        value: 1.0.0
+      - key: DEBUG
+        value: "false"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: jal-jeevan-swasthya-db
+          property: connectionString
+      - key: JWT_SECRET_KEY
+        generateValue: true
+      - key: JWT_ALGORITHM
+        value: HS256
+      - key: JWT_EXPIRY_MINUTES
+        value: "1440"
+      # JSON array of allowed browser origins. Add your Vercel frontend URL,
+      # e.g. ["https://jal-jeevan-swasthya.vercel.app"]
+      - key: CORS_ORIGINS
+        sync: false
+      - key: REDIS_URL
+        value: ""
+      - key: CACHE_ENABLED
+        value: "true"
+      - key: CACHE_TTL
+        value: "300"
+      - key: RATE_LIMIT_ENABLED
+        value: "true"
+      - key: RATE_LIMIT_WINDOW
+        value: "60"
+      - key: TRUST_PROXY_HEADERS
+        value: "true"
+      - key: ML_PRETRAIN_ENABLED
+        value: "false"
+      - key: RESET_DATABASE
+        value: "false"
+
+databases:
+  - name: jal-jeevan-swasthya-db
+    databaseName: healthwatch
+    plan: free

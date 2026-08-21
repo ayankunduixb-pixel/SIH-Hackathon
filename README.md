@@ -15,11 +15,10 @@ water-quality tests, monitor district risk, and review explainable 14-day
 outbreak forecasts. The interface supports English, Hindi, Bengali, Assamese,
 Marathi, and Tamil.
 
-The repository is a Vercel-only monorepo:
+The repository deploys as two services:
 
-- `frontend/` is a Next.js 16 App Router project.
-- `backend/` is a FastAPI project exposed through Vercel's Python runtime.
-- A managed PostgreSQL database stores application data.
+- `frontend/` is a Next.js 16 App Router project hosted on Vercel.
+- `backend/` is a FastAPI project hosted on Render with managed PostgreSQL.
 - Managed Redis is optional; the API falls back to an in-process cache.
 
 ## Features
@@ -46,7 +45,7 @@ The repository is a Vercel-only monorepo:
 | API | FastAPI, Pydantic 2, SQLAlchemy 2 |
 | Data | PostgreSQL, optional Redis |
 | Forecasting | Pure-Python exponential smoothing with optional scikit-learn regressor |
-| Hosting | Vercel for both frontend and API |
+| Hosting | Vercel for the web app, Render for the API |
 
 ## Repository layout
 
@@ -148,39 +147,53 @@ Production requirements:
 - Set `DEBUG=false`.
 - Generate a private `JWT_SECRET_KEY` of at least 32 characters.
 - Use a pooled managed PostgreSQL `DATABASE_URL`; a function-local SQLite file
-  is not durable on Vercel.
+  is not durable in production.
 - Set `CORS_ORIGINS` to a JSON array containing the deployed frontend URL and
   any preview URLs that should be permitted.
 - Set `NEXT_PUBLIC_API_URL` to the deployed backend origin, with or without a
   trailing `/api`.
 - Keep `RESET_DATABASE=false` and `ML_PRETRAIN_ENABLED=false` in production.
 
-## Vercel deployment
+## Deployment
 
-Deploy the repository as two Vercel projects so both runtimes stay on stable,
-generally available platform paths.
+The frontend runs on Vercel and the backend API runs on Render, backed by
+Render PostgreSQL.
 
-### 1. Deploy the API
+### 1. Deploy the API on Render
+
+1. Push this repository to GitHub.
+2. In [dashboard.render.com](https://dashboard.render.com), choose
+   **New + → Blueprint** and select this repository. Render reads
+   [`render.yaml`](render.yaml) and provisions the FastAPI web service plus a
+   free PostgreSQL database.
+3. When prompted for `CORS_ORIGINS`, enter a JSON array containing your Vercel
+   frontend URL, for example `["https://your-frontend.vercel.app"]`. This can
+   be updated later under the service's **Environment** tab.
+4. Deploy. The service is available at `https://jal-jeevan-swasthya-api.onrender.com`
+   (or the URL shown in the dashboard if the name was taken).
+5. Verify the health check at `/api/health` and readiness at `/api/ready`;
+   Swagger documentation is served at `/api/docs`.
+
+To load the demo accounts, run the seeder locally against the managed
+database using its external connection string from the Render dashboard:
+
+```powershell
+cd backend
+# In backend/.env set DATABASE_URL to the external connection string.
+python seed_data.py
+```
+
+Note: on Render's free plan the API sleeps after 15 minutes of inactivity and
+the free PostgreSQL instance expires after 30 days.
+
+### 2. Deploy the Next.js app on Vercel
 
 1. Import this repository in Vercel.
-2. Set the project root directory to `backend`.
-3. Keep automatic framework detection and the default build settings.
-4. Add the backend variables from `backend/.env.example`, using production
-   values. At minimum configure `DATABASE_URL`, `JWT_SECRET_KEY`, `DEBUG=false`,
-   and `CORS_ORIGINS`.
-5. Deploy. Vercel loads the FastAPI `app` exported by `backend/index.py`.
-
-The health check is `/api/health`, readiness is `/api/ready`, and API docs are
-served at `/api/docs`.
-
-### 2. Deploy the Next.js app
-
-1. Import the same repository as a second Vercel project.
 2. Set the project root directory to `frontend`.
 3. Vercel detects Next.js automatically.
-4. Set `NEXT_PUBLIC_API_URL` to the backend deployment URL.
-5. Deploy, then add the resulting frontend URL to the backend project's
-   `CORS_ORIGINS` and redeploy the API.
+4. Set `NEXT_PUBLIC_API_URL` to the Render service URL from step 1.
+5. Deploy, then make sure that URL's frontend origin is listed in the
+   backend's `CORS_ORIGINS` on Render; update it there if needed.
 
 Vercel's Git integration creates preview deployments and promotes production
 deployments. The repository CI only runs tests, linting, and the production
