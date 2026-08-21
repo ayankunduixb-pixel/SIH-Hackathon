@@ -10,7 +10,7 @@ export const metadata = {
     template: '%s | Jal Jeevan Swasthya',
   },
   description: 'Smart community health monitoring and early warning for water-borne diseases.',
-  icons: { icon: '/favicon.svg' },
+  icons: { icon: '/logo.png' },
 };
 
 // oxlint-disable-next-line react/only-export-components -- Next.js reads viewport exports from layout modules.

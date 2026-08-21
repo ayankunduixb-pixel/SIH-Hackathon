@@ -35,7 +35,10 @@ function SidebarContent({ user, t, pathname, canUpgrade, hasPending, onUpgrade, 
   return (
     <>
       <div className="p-4 border-b border-slate-700">
-        <h1 className="text-lg font-bold">🌊 Jal Jeevan Swasthya</h1>
+        <h1 className="text-lg font-bold flex items-center gap-2">
+          <img src="/logo.png" alt="" className="w-8 h-8 rounded-lg object-cover shrink-0" />
+          Jal Jeevan Swasthya
+        </h1>
         <p className="text-xs text-slate-400 mt-1">{t('app.subtitle')}</p>
       </div>
 
@@ -181,7 +184,10 @@ export default function Layout({ children }) {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
             </svg>
           </button>
-          <h1 className="text-base font-bold">🌊 Jal Jeevan Swasthya</h1>
+          <h1 className="text-base font-bold flex items-center gap-2">
+            <img src="/logo.png" alt="" className="w-6 h-6 rounded-md object-cover shrink-0" />
+            Jal Jeevan Swasthya
+          </h1>
           <div className="ml-auto flex items-center gap-2">
             <div className="w-7 h-7 rounded-full bg-blue-600 flex items-center justify-center text-xs font-bold">
               {user?.name?.charAt(0)}

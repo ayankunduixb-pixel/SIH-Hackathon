@@ -23,7 +23,10 @@ export default function Login() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-blue-100">
       <div className="w-full max-w-md p-8">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-slate-900">🌊 Jal Jeevan Swasthya</h1>
+          <h1 className="text-3xl font-bold text-slate-900 flex items-center justify-center gap-2">
+            <img src="/logo.png" alt="" className="w-10 h-10 rounded-lg object-cover shrink-0" />
+            Jal Jeevan Swasthya
+          </h1>
           <p className="text-slate-600 mt-2">Smart Community Health Monitoring</p>
         </div>
 
