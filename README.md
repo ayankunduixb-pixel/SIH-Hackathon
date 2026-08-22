@@ -546,6 +546,17 @@ qualified official.
 
 ---
 
+## 🔮 Future Scope
+
+| # | Feature | Why |
+|---|---------|-----|
+| 1 | **WhatsApp / SMS Alert Delivery** — alerts pushed via WhatsApp Business API or SMS gateway, with delivery & acknowledgment tracking | *Guaranteed reachability* |
+| 2 | **Scheduled District Reports** — auto-generated weekly/monthly PDF & Excel summaries emailed to administrators | *Saves paperwork* |
+| 3 | **IoT Water-Quality Sensors** — low-cost ESP32 probes streaming pH/turbidity readings via MQTT bridge | *Continuous monitoring* |
+| 4 | **More Regional Languages** — Bodo, Khasi, Mizo, Manipuri, Nepali added to the existing six | *Total inclusivity* |
+
+---
+
 ## 🤝 Contributing
 
 1. Fork the repository
