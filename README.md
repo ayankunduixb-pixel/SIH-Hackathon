@@ -54,8 +54,8 @@ escalate — all accessible in 6 regional languages on any device.
 | Role | Email | Password | Capabilities |
 |------|-------|----------|--------------|
 | **District Admin** | `admin@healthwatch.gov.in` | `admin123` | Full access, manage upgrades, create alerts |
-| **ASHA Worker** | `priya@healthwatch.gov.in` | `worker123` | Verify reports, submit water tests |
 | **Block Officer** | `arup@healthwatch.gov.in` | `officer123` | Alerts, ML intelligence, upgrade reviews |
+| **ASHA Worker** | `priya@healthwatch.gov.in` | `worker123` | Verify reports, submit water tests |
 | **Volunteer** | `rahul@healthwatch.gov.in` | `volunteer123` | Submit disease reports, view dashboard |
 
 These credentials are demonstration data only and must never be used for real
